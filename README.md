@@ -117,6 +117,5 @@ gradlew
 gradlew.bat
 gradle/wrapper/
 README.md
-justificativa.txt
 src/main/java/   (todas as classes)
 ```
