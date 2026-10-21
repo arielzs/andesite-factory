@@ -1,0 +1,10 @@
+# Arquivos compilados do Java
+*.class
+bin/
+
+# Gradle
+.gradle/
+build/
+
+# Configurações do VS Code
+.vscode/
