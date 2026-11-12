@@ -375,30 +375,6 @@ semente fixa nas máquinas, então o resultado é repetível. Os testes de persi
 - Os testes não cobrem o caso de arquivo sem permissão de leitura, por depender do sistema
   operacional e do usuário que executa.
 
-## Motivação e roadmap
-
-Escolhi uma fábrica de placas de vídeo porque são equipamentos complexos em design e o
-mapeamento do processo produtivo é extenso, o que deixa bastante espaço para expandir o
-projeto. Também queria entender melhor um componente que se tornou central na economia
-global: GPUs fazem processamento paralelo, e a natureza matricial de modelos convolucionais
-e transformers as torna particularmente adequadas ao treinamento e à inferência de grandes
-modelos de linguagem. Por fim, a escolha veio do meu interesse em hardware e computação.
-
-A ideia é que o sistema se aproxime cada vez mais da dinâmica de uma fábrica real, a ponto
-de dar para imaginá-lo como uma ferramenta de gestão de produção. Próximos passos que
-pretendo explorar:
-
-- **Mais insumos na placa de vídeo:** solda, placa de circuito impresso, capacitores, VRAM,
-  portas, resistores, conectores, ventoinhas, heatsinks, thermal pads e pasta térmica,
-  detalhando as etapas e criando elementos parciais que se combinam até o produto final.
-- **Mais produtos e modelos:** placas para servidores (aceleradoras de IA), ASICs,
-  processadores e placas-mãe com modelos de design diferentes. GPUs de servidor, por
-  exemplo, geralmente não têm cooler próprio: são projetadas para os sistemas de
-  arrefecimento do datacenter, líquido ou a ar.
-- **Manufatura do que hoje é matéria-prima pronta:** a própria GPU poderia ganhar etapas
-  (areia → lingotes de silício → wafers → fotolitografia → processamento químico), e o
-  mesmo vale para os coolers (bobinas de cobre, peças plásticas e peças móveis).
-
 ## Licença
 
 Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE).
