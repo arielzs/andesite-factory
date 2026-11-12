@@ -4,7 +4,7 @@
 
 ![Java 17](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
 ![Gradle](https://img.shields.io/badge/build-Gradle-02303A?logo=gradle&logoColor=white)
-![JUnit 5](https://img.shields.io/badge/tests-JUnit%205-25A162?logo=junit5&logoColor=white)
+![JUnit 6](https://img.shields.io/badge/tests-JUnit%206-25A162?logo=junit5&logoColor=white)
 [![CI](https://github.com/arielzs/andesite-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/arielzs/andesite-factory/actions/workflows/ci.yml)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
@@ -94,7 +94,7 @@ Gradle. Requer apenas **Java 17 ou superior**.
 ```bash
 ./gradlew build     # compila, roda os testes e constrói o projeto
 ./gradlew run       # executa a aplicação
-./gradlew test      # roda só os testes automatizados (JUnit 5)
+./gradlew test      # roda só os testes automatizados (JUnit 6)
 ./gradlew javadoc   # gera a documentação em build/docs/javadoc
 ```
 
@@ -292,7 +292,7 @@ src/main/java/io/github/arielzs/andesite/
     exception/                          (exceções de domínio e de persistência)
     ui/                                 (MenuConsole, interface de terminal)
 src/test/java/io/github/arielzs/andesite/
-    model/ service/ strategy/ exception/ persistence/   (testes JUnit 5)
+    model/ service/ strategy/ exception/ persistence/   (testes JUnit 6)
     suporte/                            (montagem das plantas usadas nos testes)
 ```
 
@@ -303,7 +303,7 @@ conhece `service`, `strategy`, `model` e `exception`; `service` conhece `strateg
 
 ## Testes
 
-Mais de 120 testes com **JUnit 5**, executados por `./gradlew test` (e também por
+Mais de 120 testes com **JUnit 6**, executados por `./gradlew test` (e também por
 `./gradlew build`). Eles são **independentes**: cada teste monta a própria planta
 (`suporte/PlantaDeTeste` e `suporte/PlantaPersistivel`), não usa teclado, não espera tempo
 (as pausas da produção são desligadas com `setPausasAtivas(false)`) e usa `Random` com

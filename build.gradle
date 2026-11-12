@@ -56,7 +56,7 @@ tasks.named('test') {
     testLogging {
         // Mostra no terminal quais testes passaram, falharam ou foram ignorados
         events 'passed', 'skipped', 'failed'
-        exceptionFormat 'full'
+        exceptionFormat = 'full'
         showStandardStreams = false
     }
     // Relatorio HTML em build/reports/tests/test/index.html
