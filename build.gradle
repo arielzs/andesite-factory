@@ -3,15 +3,23 @@ plugins {
     id 'application'
 }
 
-group = 'br.unicamp.mc322'
+group = 'io.github.arielzs'
 version = '1.0'
 
 repositories {
     mavenCentral()
 }
 
+dependencies {
+    // O BOM do JUnit fixa a mesma versao para todos os modulos do JUnit 6
+    testImplementation platform('org.junit:junit-bom:6.1.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // O Gradle 9 exige o launcher do JUnit Platform no classpath de execucao dos testes
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
 application {
-    mainClass = 'Main'
+    mainClass = 'io.github.arielzs.andesite.Main'
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -35,4 +43,24 @@ tasks.named('run') {
     // Faz o programa escrever em UTF-8, que é como o Gradle lê a saída. Sem isso, no
     // Windows os acentos aparecem trocados por símbolos estranhos
     jvmArgs '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8'
+}
+
+tasks.named('test') {
+    // Diz ao Gradle para descobrir e executar os testes escritos com JUnit
+    useJUnitPlatform()
+    // Os testes nunca leem o teclado nem usam os arquivos reais da aplicacao
+    jvmArgs '-Dfile.encoding=UTF-8'
+    // Falhas ocasionais do Windows ao limpar @TempDir geram aviso, nao falha do teste
+    systemProperty 'junit.jupiter.tempdir.deletion.strategy.default',
+            'org.junit.jupiter.api.io.TempDirDeletionStrategy$IgnoreFailures'
+    testLogging {
+        // Mostra no terminal quais testes passaram, falharam ou foram ignorados
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+        showStandardStreams = false
+    }
+    // Relatorio HTML em build/reports/tests/test/index.html
+    reports {
+        html.required = true
+    }
 }

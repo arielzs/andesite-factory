@@ -1,0 +1,103 @@
+digraph Classes {
+  rankdir=TB; nodesep=0.45; ranksep=0.75; compound=true; newrank=true;
+  labelloc=t; fontname="Helvetica-Bold"; fontsize=18;
+  label="Andesite Hardware Co. — Diagrama de classes (pacotes service, strategy e model)\n\n";
+  node [shape=record, fontname="Helvetica", fontsize=10, style=filled, fillcolor="#fdfdf5"];
+  edge [fontname="Helvetica", fontsize=9, labeldistance=1.8];
+
+  // ================= service =================
+  subgraph cluster_service {
+    label="service"; style="rounded,filled"; fillcolor="#f1faf4"; color="#2e9e5b"; fontname="Helvetica-Bold"; fontsize=12;
+    Gerenciador [label="{GerenciadorProducao|- budget : double\l- contadorUnidadesCriadas : int\l- pausasAtivas : boolean\l- demandas : List\<Demanda\>\l- catalogoProdutos : List\<Produto\>\l- produtosFabricados : List\<Produto\>\l|+ registrarDemanda(String)\l+ atualizarDemanda(String, int)\l+ cancelarDemanda(String)\l+ comprarMateriaPrima(double)\l+ fabricarDemanda(String)\l+ executarProximaProducao()\l+ setEstrategia(EstrategiaProducao)\l+ adicionarMaquina(Maquina)\l+ repararMaquinas() : int\l+ gerarAuditoriaGeral()\l+ restaurarMaquina(Maquina, EstadoMaquina)\l+ restaurarDemanda(String, int, StatusDemanda)\l}"];
+  }
+
+  // ================= strategy =================
+  subgraph cluster_strategy {
+    label="strategy"; style="rounded,filled"; fillcolor="#fff7ec"; color="#c9731c"; fontname="Helvetica-Bold"; fontsize=12;
+    Estrategia [label="{«interface»\nEstrategiaProducao|+ selecionarDemanda(List\<Demanda\>, double) : Demanda\l+ getNomeEstrategia() : String\l}", fillcolor="#eef4ff"];
+    Fila [label="{EstrategiaFilaDaFundicao|+ selecionarDemanda(...)\l+ getNomeEstrategia()\l}"];
+    Lote [label="{EstrategiaMaiorLote|+ selecionarDemanda(...)\l+ getNomeEstrategia()\l}"];
+    Rend [label="{EstrategiaMaximoRendimento|+ selecionarDemanda(...)\l+ getNomeEstrategia()\l}"];
+  }
+
+  // ================= model =================
+  subgraph cluster_model {
+    label="model"; style="rounded,filled"; fillcolor="#f8f4fd"; color="#7a4ac9"; fontname="Helvetica-Bold"; fontsize=12;
+
+    Auditavel [label="{«interface»\nAuditavel|+ gerarRelatorioDiagnostico() : String\l+ precisaManutencao() : boolean\l}", fillcolor="#eef4ff"];
+
+    Linha [label="{LinhaDeProducao|- nome : String\l|+ adicionarMaquina(Maquina)\l+ removerMaquina(Maquina) : boolean\l+ getMaquinas() : List\<Maquina\>\l+ repararMaquinas() : int\l}"];
+    Esteira [label="{Esteira|- capacidadeMaxima : double\l- emMovimento : boolean\l|+ ligar()\l+ desligar()\l+ adicionarItem(Produto)\l+ removerProduto() : Produto\l+ estaVazia() : boolean\l}"];
+    Materia [label="{MateriaPrima|- id : String\l- nome : String\l- quantidade : double\l- unidade : String\l- custoPorUnidade : double\l- quantidadeMinima : double\l|+ consumir(double)\l+ adicionarEstoque(double)\l+ verificarDisponibilidade(double) : boolean\l+ atendeLoteMinimo(double) : boolean\l}"];
+    Demanda [label="{Demanda|- tipoProduto : String\l- quantidade : int\l|+ atualizarQuantidade(int)\l+ iniciarProducao()\l+ concluir()\l+ cancelar()\l+ calcularMateriaPrimaNecessaria(Produto) : double\l+ \{static\} restaurar(String, int, StatusDemanda) : Demanda\l}"];
+    Cenario [label="{«enumeration»\nCenario|IDEAL\lAPOCALIPTICO\l|+ getBudgetInicial() : double\l+ getFatorProbabilidadeFalha() : double\l+ getDesgasteMinimoPorUso() : double\l+ getDesgasteMaximoPorUso() : double\l}", fillcolor="#f0f0f0"];
+    StatusDemanda [label="{«enumeration»\nStatusDemanda|PENDENTE\lEM_PRODUCAO\lCONCLUIDA\lCANCELADA\l}", fillcolor="#f0f0f0"];
+
+    Produto [label="{«abstract»\nProduto|- id : String\l- nome : String\l- quantidadeMateriaPrimaPorUnidade : double\l- qualidade : double\l- probabilidadeFalhaAcumulada : double\l- massa : double\l|+ \{abstract\} processar()\l+ \{abstract\} calcularTempoProducao() : double\l+ \{abstract\} getTipo() : String\l}"];
+    Entrada [label="{ComponenteEntrada|+ criarUnidade(String) : ComponenteEntrada\l}"];
+    Performance [label="{ComponentePerformance|+ criarUnidade(String) : ComponentePerformance\l}"];
+    Flagship [label="{ComponenteFlagship|+ criarUnidade(String) : ComponenteFlagship\l}"];
+    Categoria [label="{«enumeration»\nCategoriaProduto|PLACA_DE_VIDEO\lPROCESSADOR\lPLACA_MAE\l|+ getTempoBaseProducao() : double\l}", fillcolor="#f0f0f0"];
+    StatusProduto [label="{«enumeration»\nStatusProduto|AGUARDANDO\lPROCESSADO\lINSPECIONADO\lREJEITADO\l}", fillcolor="#f0f0f0"];
+
+    Maquina [label="{«abstract»\nMaquina|- nome : String\l- capacidadeMaxima : double\l- ligada : boolean\l- custoOperacao : double\l# probabilidadeFalha : double\l- saude : double\l- limiarManutencao : double\l|+ \{abstract\} processar(Produto)\l+ \{abstract\} getTipo() : String\l+ ligar()\l+ desligar()\l+ desgastar()\l+ reparar()\l+ estaQuebrada() : boolean\l+ obterEstado() : EstadoMaquina\l+ restaurarEstado(EstadoMaquina)\l+ lerTemperaturaMotor() : double\l+ lerCalibracaoSensor() : double\l+ contarAtuadoresOperacionais() : int\l}"];
+    Insersora [label="{InsersoraSMT|+ processar(Produto)\l+ getTipo() : String\l}"];
+    Montadora [label="{Montadora|+ processar(Produto)\l+ getTipo() : String\l}"];
+    Inspetora [label="{Inspetora|+ processar(Produto)\l+ getTipo() : String\l+ \{static\} getTotalInspecionados() : int\l}"];
+    Estado [label="{«record»\nEstadoMaquina|saude : double\llimiarManutencao : double\lprobabilidadeFalha : double\ltemperaturaMotor : double\lcalibracaoSensor : double\lintegridadeAtuadores : List\<Double\>\l}", fillcolor="#fff4e5"];
+
+    Motor [label="{MotorDeAcionamento|- temperatura : double\l|~ aquecer(double)\l~ resfriar(double)\l+ estaSuperaquecido() : boolean\l}"];
+    Sensor [label="{SensorDeCalibracao|- calibracao : double\l|~ desgastar(double)\l+ estaDescalibrado() : boolean\l}"];
+    Atuador [label="{AtuadorPneumatico|- numero : int\l- integridade : double\l|~ desgastar(double)\l+ estaQuebrado() : boolean\l}"];
+  }
+
+  // ---------- Strategy ----------
+  Fila -> Estrategia [style=dashed, arrowhead=empty];
+  Lote -> Estrategia [style=dashed, arrowhead=empty];
+  Rend -> Estrategia [style=dashed, arrowhead=empty];
+  Estrategia -> Demanda [style=dashed, arrowhead=vee, label="«use»"];
+
+  // ---------- GerenciadorProducao (contexto) ----------
+  Gerenciador -> Estrategia [arrowhead=vee, headlabel="1", label="- estrategiaAtual", taillabel=""];
+  Gerenciador -> Cenario [arrowhead=vee, headlabel="1", label="- cenarioAtual"];
+  Gerenciador -> Linha [dir=both, arrowtail=diamond, arrowhead=none, headlabel="1", label="- linhaProducao"];
+  Gerenciador -> Esteira [dir=both, arrowtail=diamond, arrowhead=none, headlabel="1", label="- esteira"];
+  Gerenciador -> Demanda [dir=both, arrowtail=diamond, arrowhead=none, headlabel="0..*", label="- demandas"];
+  Gerenciador -> Materia [dir=both, arrowtail=odiamond, arrowhead=none, headlabel="1", label="- materiaPrima"];
+  Gerenciador -> Produto [dir=both, arrowtail=odiamond, arrowhead=none, headlabel="0..*", label="- catalogoProdutos\n- produtosFabricados"];
+
+  // ---------- Linha / Maquina ----------
+  Linha -> Maquina [dir=both, arrowtail=odiamond, arrowhead=none, headlabel="1..*", label="- maquinas"];
+  Maquina -> Motor [dir=both, arrowtail=diamond, arrowhead=none, headlabel="1", label="- motor"];
+  Maquina -> Sensor [dir=both, arrowtail=diamond, arrowhead=none, headlabel="1", label="- sensor"];
+  Maquina -> Atuador [dir=both, arrowtail=diamond, arrowhead=none, headlabel="1..*", label="- atuadores"];
+  Maquina -> Estado [style=dashed, arrowhead=vee, label="«create»"];
+  Maquina -> Produto [style=dashed, arrowhead=vee, label="«use»"];
+  Insersora -> Maquina [arrowhead=empty];
+  Montadora -> Maquina [arrowhead=empty];
+  Inspetora -> Maquina [arrowhead=empty];
+
+  // ---------- Produto ----------
+  Entrada -> Produto [arrowhead=empty];
+  Performance -> Produto [arrowhead=empty];
+  Flagship -> Produto [arrowhead=empty];
+  Produto -> Categoria [arrowhead=vee, headlabel="1", label="- categoria"];
+  Produto -> StatusProduto [arrowhead=vee, headlabel="1", label="- status"];
+  Esteira -> Produto [arrowhead=vee, headlabel="0..1", label="- itemProduto"];
+  Demanda -> StatusDemanda [arrowhead=vee, headlabel="1", label="- status"];
+  Demanda -> Produto [style=dashed, arrowhead=vee, label="«use»"];
+
+  // ---------- Auditavel ----------
+  Produto -> Auditavel [style=dashed, arrowhead=empty];
+  Linha -> Auditavel [style=dashed, arrowhead=empty];
+  Maquina -> Auditavel [style=dashed, arrowhead=empty];
+  Motor -> Auditavel [style=dashed, arrowhead=empty];
+  Sensor -> Auditavel [style=dashed, arrowhead=empty];
+  Atuador -> Auditavel [style=dashed, arrowhead=empty];
+
+  // ---------- Posicionamento ----------
+  {rank=same; Fila; Lote; Rend}
+  {rank=same; Entrada; Performance; Flagship}
+  {rank=same; Insersora; Montadora; Inspetora}
+  {rank=same; Motor; Sensor; Atuador}
+}

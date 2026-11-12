@@ -1,0 +1,56 @@
+digraph Pacotes {
+  rankdir=TB; nodesep=0.6; ranksep=1.0; compound=true; newrank=true;
+  labelloc=t; fontname="Helvetica-Bold"; fontsize=18;
+  label="Andesite Hardware Co. — Diagrama de pacotes e dependências\n\nLegenda: seta preta tracejada = importa (depende de) · pontilhada vermelha = lança · pontilhada azul = captura · seta oca = herança\n\n";
+  node [shape=tab, fontname="Helvetica", fontsize=10, style=filled, fillcolor="#fdfdf5", margin="0.25,0.15"];
+  edge [fontname="Helvetica", fontsize=9, arrowhead=vee, style=dashed];
+
+  Main [label=<<B>(raiz)</B><BR/>Main>, fillcolor="#f0f0f0"];
+  ui [label=<<B>ui</B><BR/>MenuConsole>, fillcolor="#eaf1fd"];
+  service [label=<<B>service</B><BR/>GerenciadorProducao>, fillcolor="#e9f7ee"];
+  strategy [label=<<B>strategy</B><BR/>EstrategiaProducao «interface»<BR/>EstrategiaFilaDaFundicao<BR/>EstrategiaMaiorLote<BR/>EstrategiaMaximoRendimento>, fillcolor="#fff3e3"];
+  persistence [label=<<B>persistence</B><BR/>PersistenciaPlanta<BR/>EscritorXmlPlanta «pacote»<BR/>LeitorXmlPlanta «pacote»<BR/>FormatoXml «pacote»>, fillcolor="#fbe9ee"];
+  model [label=<<B>model</B><BR/>Produto e 3 tiers · Maquina e 3 tipos<BR/>LinhaDeProducao · Esteira · Demanda<BR/>MateriaPrima · Motor · Sensor · Atuador<BR/>EstadoMaquina · Auditavel · enums>, fillcolor="#f3ecfb"];
+
+  // Hierarquia de excecoes (dentro do pacote exception)
+  subgraph cluster_exception {
+    label="exception"; style="rounded,filled"; fillcolor="#f6f6f6"; color="#555555"; fontname="Helvetica-Bold"; fontsize=12;
+    node [shape=record, fillcolor="#fdeeee", margin="0.12,0.06"];
+    edge [arrowhead=empty, style=solid];
+    PlantaEx [label="{«RuntimeException»\nPlantaException}"];
+    Recurso [label="RecursoInsuficienteException"];
+    DemandaEx [label="DemandaInvalidaException"];
+    Maq [label="MaquinaIndisponivelException"];
+    Qtd [label="QuantidadeInvalidaException"];
+    PersEx [label="PersistenciaException"];
+    NaoEnc [label="ArquivoNaoEncontradoException"];
+    Corr [label="ArquivoCorrompidoException"];
+    Dados [label="DadosInvalidosException"];
+    Recurso -> PlantaEx; DemandaEx -> PlantaEx; Maq -> PlantaEx; Qtd -> PlantaEx; PersEx -> PlantaEx;
+    NaoEnc -> PersEx; Corr -> PersEx; Dados -> PersEx;
+  }
+
+  // Dependencias entre pacotes (derivadas dos imports)
+  Main -> ui;
+  ui -> service; ui -> model; ui -> strategy; ui -> persistence;
+  persistence -> service; persistence -> model; persistence -> strategy;
+  service -> strategy; service -> model;
+  strategy -> model;
+
+  // Excecoes lancadas / capturadas
+  service -> Recurso [style=dotted, color="#b03a3a", fontcolor="#b03a3a", label="lança"];
+  service -> DemandaEx [style=dotted, color="#b03a3a"];
+  service -> Maq [style=dotted, color="#b03a3a"];
+  service -> Qtd [style=dotted, color="#b03a3a"];
+  model -> Recurso [style=dotted, color="#b03a3a"];
+  model -> DemandaEx [style=dotted, color="#b03a3a"];
+  model -> Maq [style=dotted, color="#b03a3a"];
+  model -> Qtd [style=dotted, color="#b03a3a"];
+  persistence -> NaoEnc [style=dotted, color="#b03a3a"];
+  persistence -> Corr [style=dotted, color="#b03a3a"];
+  persistence -> Dados [style=dotted, color="#b03a3a"];
+  persistence -> PersEx [style=dotted, color="#b03a3a"];
+  ui -> PlantaEx [style=dotted, color="#2a6fd6", fontcolor="#2a6fd6", label="captura"];
+
+  {rank=same; service; persistence}
+}

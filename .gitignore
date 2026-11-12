@@ -8,3 +8,16 @@ build/
 
 # Configurações do VS Code
 .vscode/
+
+# Estado da planta salvo pela aplicação (gerado ao executar, não faz parte do código)
+dados/
+
+# IDEs e sistema operacional
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db
+out/
