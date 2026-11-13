@@ -11,7 +11,7 @@
 Simulador de uma fábrica de hardware (placas de vídeo, processadores e placas-mãe) em
 **Java 17**, executado no terminal. Gerencia demandas, estoque de matéria-prima, orçamento
 e uma linha de produção com esteiras e máquinas que se desgastam, falham e podem ser
-reparadas. O estado da fábrica é salvo e carregado em **XML**.
+reparadas. O estado da fábrica é salvo e pode ser carregado em **XML**.
 
 Construí o projeto para praticar **orientação a objetos de verdade**: hierarquias de
 classes, composição, polimorfismo, o padrão Strategy, tratamento de erros com exceções de
