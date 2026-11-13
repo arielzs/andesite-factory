@@ -279,7 +279,6 @@ gradle.properties
 gradlew / gradlew.bat
 gradle/wrapper/
 LICENSE
-CHANGELOG.md
 README.md
 .github/workflows/ci.yml                (build e testes a cada push)
 docs/                                   (diagramas UML em .dot e .png)
